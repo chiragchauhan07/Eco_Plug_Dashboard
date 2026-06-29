@@ -135,29 +135,29 @@ export function FeedbackPage() {
     <main className="h-full flex flex-col overflow-hidden">
 
       {/*  TopNavBar Component  */}
-      <header className="bg-surface dark:bg-surface-dim fixed top-0 right-0 w-[calc(100%-16rem)] h-16 border-b border-outline-variant dark:border-outline z-40 flex justify-between items-center px-lg">
+      <header className="bg-[#000000] fixed top-0 right-0 w-[calc(100%-16rem)] h-16 border-b border-outline-variant dark:border-outline z-40 flex justify-between items-center px-lg">
         <div className="flex-1 flex items-center gap-4">
-          <h2 className="font-headline-sm text-headline-sm font-semibold text-primary dark:text-primary-fixed">Customer Feedback</h2>
-          {loadingList && <span className="material-symbols-outlined animate-spin text-secondary text-sm">progress_activity</span>}
+          <h2 className="font-headline-sm text-headline-sm font-semibold text-white">Customer Feedback</h2>
+          {loadingList && <span className="material-symbols-outlined animate-spin text-white/70 text-sm">progress_activity</span>}
         </div>
         <div className="flex items-center gap-6">
           <div className="relative">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60">search</span>
             <input 
-              className="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 font-body-sm transition-all duration-200" 
+              className="pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full text-white placeholder-zinc-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 font-body-sm transition-all duration-200" 
               placeholder="Search by phone..." 
               type="text"
               value={filters.searchQuery}
               onChange={(e) => setFilters(f => ({ ...f, searchQuery: e.target.value }))}
             />
           </div>
-          <div className="flex items-center gap-3 cursor-pointer hover:bg-surface-container-low p-2 rounded-lg transition-colors">
+          <div className="flex items-center gap-3 cursor-pointer hover:bg-white/10 p-2 rounded-lg transition-colors">
             <div className="w-8 h-8 rounded-full bg-tertiary-container overflow-hidden">
               <div className="w-full h-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
                 AD
               </div>
             </div>
-            <span className="font-label-md text-label-md text-on-surface">Admin</span>
+            <span className="font-label-md text-label-md text-white">Admin</span>
           </div>
         </div>
       </header>

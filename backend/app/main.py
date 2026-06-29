@@ -1,3 +1,5 @@
+import sys
+
 from fastapi import FastAPI
 
 from app.api.health import router as health_router
@@ -28,6 +30,12 @@ def create_app() -> FastAPI:
         redoc_url="/redoc" if settings.DEBUG else None,
     )
 
+    # --- Startup Diagnostics ---
+    print(f"[STARTUP] ENV={settings.ENV}", file=sys.stderr)
+    print(f"[STARTUP] DEBUG={settings.DEBUG}", file=sys.stderr)
+    print(f"[STARTUP] ALLOWED_HOSTS={settings.ALLOWED_HOSTS}", file=sys.stderr)
+    print(f"[STARTUP] CORS_ORIGINS={settings.CORS_ORIGINS}", file=sys.stderr)
+
     # Setup Middleware (Order is important)
     app.add_middleware(TimingMiddleware)
     app.add_middleware(LoggingMiddleware)
@@ -36,7 +44,18 @@ def create_app() -> FastAPI:
     # Setup Security
     setup_compression(app)
     setup_cors(app)
-    setup_trusted_host(app, allowed_hosts=settings.ALLOWED_HOSTS)
+
+    # TrustedHostMiddleware: Only enable when explicit hosts are configured
+    # (not the wildcard default). On Render / cloud platforms the reverse
+    # proxy already validates the Host header, so application-level
+    # validation is redundant and causes "Invalid host header" errors
+    # when the proxy forwards an unexpected Host value.
+    if settings.ALLOWED_HOSTS and settings.ALLOWED_HOSTS != ["*"]:
+        print(f"[STARTUP] TrustedHostMiddleware ENABLED with: {settings.ALLOWED_HOSTS}", file=sys.stderr)
+        setup_trusted_host(app, allowed_hosts=settings.ALLOWED_HOSTS)
+    else:
+        print("[STARTUP] TrustedHostMiddleware DISABLED (ALLOWED_HOSTS=['*'] or empty)", file=sys.stderr)
+
     setup_exception_handlers(app)
 
     # Setup Routers
